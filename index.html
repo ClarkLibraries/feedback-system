@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Feedback</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <h1>How Are We Doing?</h1>
+    <div id="feedback-buttons">
+        <button onclick="submitFeedback('stoked')">😃 Stoked</button>
+        <button onclick="submitFeedback('hopeful')">😊 Hopeful</button>
+        <button onclick="submitFeedback('curious')">🤔 Curious</button>
+        <button onclick="submitFeedback('confident')">💪 Confident</button>
+        <button onclick="submitFeedback('kindainterested')">🙂 Kinda Interested</button>
+        <button onclick="submitFeedback('distracted')">😵 Distracted</button>
+        <button onclick="submitFeedback('bored')">😒 Bored</button>
+        <button onclick="submitFeedback('confused')">😕 Confused</button>
+        <button onclick="submitFeedback('overwhelmed')">😫 Overwhelmed</button>
+        <button onclick="submitFeedback('burnedout')">🔥 Burned Out</button>
+    </div>
+
+    <script>
+        function submitFeedback(feedbackType) {
+            fetch("https://api.github.com/repos/ClarkLibraries/feedback-system/dispatches", {
+                method: "POST",
+                headers: {
+                    "Authorization": `token YOUR_GITHUB_PAT`, 
+                    "Accept": "application/vnd.github.everest-preview+json"
+                },
+                body: JSON.stringify({
+                    event_type: "update-feedback",
+                    client_payload: { feedback: feedbackType }
+                })
+            })
+            .then(response => console.log("Feedback submitted"))
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+
+</body>
+</html>
