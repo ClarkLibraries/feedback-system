@@ -1,0 +1,23 @@
+name: Save Feedback
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  save_feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Append feedback to JSON
+        run: |
+          echo "{\"feedback\": \"${{ github.event.issue.title }}\"}" >> feedback.json
+
+      - name: Commit and push feedback
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add feedback.json
+          git commit -m "Added feedback"
+          git push
